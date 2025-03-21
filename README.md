@@ -99,10 +99,8 @@ module "keyvault_appconfig" {
   appconfig_name      = local.aac_name
   aac_sku             = local.aac_sku
   tags                = local.tags
-
-  appconfig_keys      = {
-    "FeatureFlagA" = "enabled"
-    "API_URL"      = "https://api.example.com"
-  }
-  appconfig_kv_secrets = ["DatabasePassword", "StorageKey"]
+secrets = {
+    "DatabasePassword" = "ExampleSecret"
+    "StorageKey"       = "123ABC"
+    }
 }

@@ -24,6 +24,15 @@ resource "azurerm_key_vault" "kv" {
         }
 }   
 
+resource "azurerm_key_vault_secret" "kv_secrets" {
+    for_each     = var.secrets
+    name         = each.key
+    value        = each.value
+    key_vault_id = azurerm_key_vault.kv.id
+    content_type = "text/plain"
+    tags         = var.tags
+}
+
 resource "azurerm_app_configuration" "appconfig" {
     name                = var.appconfig_name
     location            = azurerm_resource_group.rg.location
@@ -32,18 +41,9 @@ resource "azurerm_app_configuration" "appconfig" {
     tags                = var.tags
 }
 
-resource "azurerm_app_configuration_key" "appconfig_keys" {
-    for_each               = var.appconfig_keys
+resource "azurerm_app_configuration_key" "kv_secrets" {
+    for_each               = var.secrets
     configuration_store_id = azurerm_app_configuration.appconfig.id
     key                    = each.key
-    value                  = each.value
-    type                   = "string"
+    vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${each.key}"
 }
-
-resource "azurerm_app_configuration_key" "kv_secrets" {
-    for_each               = toset(var.appconfig_kv_secrets)
-    configuration_store_id = azurerm_app_configuration.appconfig.id
-    key                    = each.value
-    vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${each.value}"
-}
-

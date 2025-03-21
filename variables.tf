@@ -30,39 +30,47 @@ variable "appconfig_name" {
 }
 
 variable "kv_sku" {
-  description = "Sku of the key vault"
+  description = "SKU of the Key Vault (standard or premium)"
   type        = string
+  default     = "standard"
+
+  validation {
+    condition     = contains(["standard", "premium"], var.kv_sku)
+    error_message = "Valid values for kv_sku are 'standard' or 'premium'."
+  }
+}
+
+variable "aac_sku" {
+  description = "SKU of the App Configuration (free or standard)"
+  type        = string
+  default     = "standard"
+
+  validation {
+    condition     = contains(["free", "standard"], var.aac_sku)
+    error_message = "Valid values for aac_sku are 'free' or 'standard'."
+  }
 }
 
 variable "tags" {
   description = "Tags for the resources"
-  type        = map(string) 
-}
-
-variable "ip_rules" {
-  description = "List of IP addresses that are allowed to access the key vault"
-  type        = list(string)
-}
-
-variable "subnet_ids" {
-  description = "List of subnet IDs that are allowed to access the key vault"
-  type        = list(string)
-  
-}
-
-variable "aac_sku" {
-  description = "Sku of the App Config"
-  type        = string
-}
-
-variable "appconfig_keys" {
-  description = "Map of keys and values to add to the App Configuration"
   type        = map(string)
   default     = {}
 }
 
-variable "appconfig_kv_secrets" {
-  description = "Map of Key Vault secrets to import into App Configuration"
+variable "ip_rules" {
+  description = "List of IP addresses that are allowed to access the Key Vault"
   type        = list(string)
   default     = []
+}
+
+variable "subnet_ids" {
+  description = "List of subnet IDs that are allowed to access the Key Vault"
+  type        = list(string)
+  default     = []
+}
+
+variable "secrets" {
+  description = "Map of Key Vault secrets (name → value) that should be created"
+  type        = map(string)
+  default     = {}
 }
