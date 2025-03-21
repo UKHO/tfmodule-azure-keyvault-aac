@@ -35,8 +35,8 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
 
 resource "azurerm_app_configuration" "appconfig" {
     name                = var.appconfig_name
-    location            = azurerm_resource_group.rg.location
-    resource_group_name = azurerm_resource_group.rg.name
+    location            = var.location
+    resource_group_name = var.resource_group_name
     sku                 = var.aac_sku
     tags                = var.tags
 }
