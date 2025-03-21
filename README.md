@@ -87,20 +87,20 @@ variable "appconfig_kv_secrets" {
 Example usage: 
 
 module "keyvault_appconfig" {
-  source              = "github.com/UKHO/terraform-azure-keyvault-appconfig"
-  resource_group_name = local.rg
-  location            = local.location
-  keyvault_name       = local.kv_name
-  tenant_id           = local.tenant_id
-  enable_rbac         = false
-  kv_sku              = local.kv_sku
-  ip_rules            = local.ip_rules
-  subnet_ids          = local.subnet_ids
-  appconfig_name      = local.aac_name
-  aac_sku             = local.aac_sku
-  tags                = local.tags
-secrets = {
-    "DatabasePassword" = "ExampleSecret"
-    "StorageKey"       = "123ABC"
+    source              = "github.com/UKHO/terraform-azure-keyvault-appconfig"
+    resource_group_name = local.rg
+    location            = local.location
+    keyvault_name       = local.kv_name
+    tenant_id           = local.tenant_id
+    enable_rbac         = false
+    kv_sku              = local.kv_sku
+    ip_rules            = local.ip_rules
+    subnet_ids          = local.subnet_ids
+    appconfig_name      = local.aac_name
+    aac_sku             = local.aac_sku
+    tags                = local.tags
+    secrets = {
+        "DatabasePassword" = "ExampleSecret"
+        "StorageKey"       = "123ABC"
+        }
     }
-}
