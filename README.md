@@ -52,7 +52,7 @@ variable "kv_sku" {
 
 variable "tags" {
   description = "Tags for the resources"
-  type        = map(string) 
+  type        = map(string)
 }
 
 variable "ip_rules" {
@@ -88,18 +88,21 @@ Example usage:
 
 module "keyvault_appconfig" {
   source              = "github.com/UKHO/terraform-azure-keyvault-appconfig"
-  resource_group_name = var.resource_grou_name
-  location            = var.location
-  keyvault_name       = var.kv_name
-  tenant_id           = var.tenant_id
+  resource_group_name = local.rg
+  location            = local.location
+  keyvault_name       = local.kv_name
+  tenant_id           = local.tenant_id
   enable_rbac         = false
-  appconfig_name      = var.aac_name
+  kv_sku              = local.kv_sku
+  ip_rules            = local.ip_rules
+  subnet_ids          = local.subnet_ids
+  appconfig_name      = local.aac_name
+  aac_sku             = local.aac_sku
+  tags                = local.tags
 
-  appconfig_keys = {
-    "example key" = "enabled"
-    "API_URL"     = "https://api.example.com"
+  appconfig_keys      = {
+    "FeatureFlagA" = "enabled"
+    "API_URL"      = "https://api.example.com"
   }
-
-  appconfig_kv_secrets = ["ExampleAPIKey", "StorageKey"]
+  appconfig_kv_secrets = ["DatabasePassword", "StorageKey"]
 }
-
