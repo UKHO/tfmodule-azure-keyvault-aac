@@ -41,9 +41,9 @@ resource "azurerm_app_configuration_key" "appconfig_keys" {
 }
 
 resource "azurerm_app_configuration_key" "kv_secrets" {
-    for_each             = toset(var.appconfig_kv_secrets)
+    for_each               = toset(var.appconfig_kv_secrets)
     configuration_store_id = azurerm_app_configuration.appconfig.id
-    key                 = each.value
-    vault_key_reference = "${azurerm_key_vault.kv.vault_uri}secrets/${each.value}"
+    key                    = each.value
+    vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${each.value}"
 }
 

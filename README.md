@@ -100,6 +100,6 @@ module "keyvault_appconfig" {
     "API_URL"     = "https://api.example.com"
   }
 
-  appconfig_kv_secrets = ["ExampleAPIKey, "StorageKey"]
+  appconfig_kv_secrets = ["ExampleAPIKey", "StorageKey"]
 }
 
