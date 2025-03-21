@@ -1,4 +1,4 @@
-# Terraform Module: for Azure Private Endpoints
+# Terraform Module: for Azure Key Vault and App Config (with key value pairs)
 
 ##
 
