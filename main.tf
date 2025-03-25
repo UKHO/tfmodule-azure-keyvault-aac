@@ -56,7 +56,7 @@ resource "azurerm_app_configuration" "appconfig" {
 }
 
 resource "azurerm_app_configuration_key" "kv_secrets" {
-    depends_on             = [ azurerm_key_vault_secret.kv_secrets ]
+    depends_on             = [ azurerm_key_vault_secret.kv_secrets, azurerm_app_configuration.appconfig ]
     for_each               = var.secrets
     configuration_store_id = azurerm_app_configuration.appconfig.id
     type                   = "vault"
