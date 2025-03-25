@@ -25,9 +25,10 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_access_policy" "example" {
+    depends_on = [ azurerm_key_vault.kv ]
     key_vault_id = azurerm_key_vault.kv.id
     tenant_id    = var.tenant_id
-    object_id    = var.object_id # This should be the user, service principal, or managed identity's object ID
+    object_id    = var.object_id
 
     secret_permissions = [
         "Get",
