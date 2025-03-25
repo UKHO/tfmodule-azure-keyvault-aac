@@ -18,6 +18,11 @@ variable "tenant_id" {
   type        = string
 }
 
+variable "object_id" {
+  description = "Azure Tenant ID"
+  type        = string
+}
+
 variable "enable_rbac" {
   description = "Enable RBAC authorization for Key Vault"
   type        = bool

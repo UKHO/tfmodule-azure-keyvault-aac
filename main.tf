@@ -22,7 +22,20 @@ resource "azurerm_key_vault" "kv" {
             tags
         ]
         }
-}   
+}
+
+resource "azurerm_key_vault_access_policy" "example" {
+    key_vault_id = azurerm_key_vault.kv.id
+    tenant_id    = var.tenant_id
+    object_id    = var.object_id # This should be the user, service principal, or managed identity's object ID
+
+    secret_permissions = [
+        "Get",
+        "Set",
+        "List"
+    ]
+}
+
 
 resource "azurerm_key_vault_secret" "kv_secrets" {
     for_each     = var.secrets
