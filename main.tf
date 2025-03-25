@@ -24,11 +24,14 @@ resource "azurerm_key_vault" "kv" {
         }
 }
 
+data "azurerm_client_config" "current" {}
+
+
 resource "azurerm_key_vault_access_policy" "kv_access" {
     depends_on = [ azurerm_key_vault.kv ]
     key_vault_id = azurerm_key_vault.kv.id
     tenant_id    = var.tenant_id
-    object_id    = var.object_id
+    object_id    = data.azurerm_client_config.current.object_id
 
     secret_permissions = [
         "Get",
@@ -55,8 +58,15 @@ resource "azurerm_app_configuration" "appconfig" {
     tags                = var.tags
 }
 
+resource "azurerm_role_assignment" "appconf_dataowner" {
+    depends_on = [ azurerm_app_configuration.appconfig ]
+    scope                = azurerm_app_configuration.appconf.id
+    role_definition_name = "App Configuration Data Owner"
+    principal_id         = data.azurerm_client_config.current.object_id
+}
+
 resource "azurerm_app_configuration_key" "kv_secrets" {
-    depends_on             = [ azurerm_key_vault_secret.kv_secrets, azurerm_app_configuration.appconfig ]
+    depends_on             = [ azurerm_key_vault_secret.kv_secrets, azurerm_role_assignment.appconf_dataowner]
     for_each               = var.secrets
     configuration_store_id = azurerm_app_configuration.appconfig.id
     type                   = "vault"
