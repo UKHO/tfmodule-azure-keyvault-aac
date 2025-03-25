@@ -24,7 +24,7 @@ resource "azurerm_key_vault" "kv" {
         }
 }
 
-resource "azurerm_key_vault_access_policy" "example" {
+resource "azurerm_key_vault_access_policy" "kv_access" {
     depends_on = [ azurerm_key_vault.kv ]
     key_vault_id = azurerm_key_vault.kv.id
     tenant_id    = var.tenant_id
@@ -37,8 +37,8 @@ resource "azurerm_key_vault_access_policy" "example" {
     ]
 }
 
-
 resource "azurerm_key_vault_secret" "kv_secrets" {
+    depends_on = [ azurerm_key_vault_access_policy.kv_access ]
     for_each     = var.secrets
     name         = each.key
     value        = each.value
