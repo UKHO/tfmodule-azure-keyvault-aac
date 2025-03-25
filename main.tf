@@ -60,7 +60,7 @@ resource "azurerm_app_configuration" "appconfig" {
 
 resource "azurerm_role_assignment" "appconf_dataowner" {
     depends_on = [ azurerm_app_configuration.appconfig ]
-    scope                = azurerm_app_configuration.appconf
+    scope                = azurerm_app_configuration.appconfig.id
     role_definition_name = "App Configuration Data Owner"
     principal_id         = data.azurerm_client_config.current.object_id
 }
