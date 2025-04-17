@@ -36,7 +36,8 @@ resource "azurerm_key_vault_access_policy" "kv_access" {
     secret_permissions = [
         "Get",
         "Set",
-        "List"
+        "List",
+        "Delete"
     ]
 }
 
