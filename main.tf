@@ -44,7 +44,7 @@ resource "azurerm_key_vault_access_policy" "kv_access" {
 resource "azurerm_key_vault_secret" "kv_secrets" {
     depends_on = [ azurerm_key_vault_access_policy.kv_access ]
     for_each     = var.secrets
-    name         = lower(replace(each.key, "__", "-"))
+    name         = replace(lower(each.key), "__", "-")
     value        = each.value
     key_vault_id = azurerm_key_vault.kv.id
     tags         = var.tags
@@ -71,5 +71,5 @@ resource "azurerm_app_configuration_key" "kv_secrets" {
     configuration_store_id = azurerm_app_configuration.appconfig.id
     type                   = "vault"
     key                    = replace(each.key, "__", ":")
-    vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${lower(replace(each.key, "__", "-"))}"
+    vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${replace(lower(each.key), "__", "-")}"
 }
