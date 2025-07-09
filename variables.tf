@@ -21,6 +21,7 @@ variable "tenant_id" {
 variable "subscription_id" {
   description = "Azure Subscription ID"
   type        = string
+  default     = null
 }
 
 variable "principal_id" {
