@@ -18,6 +18,18 @@ variable "tenant_id" {
   type        = string
 }
 
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+  default     = null
+}
+
+variable "principal_id" {
+  description = "The object id of the terraform principal (Optional). If not supplied then data.azurerm_client_config.current.object_id will be used"
+  type        = string
+  default     = null
+}
+
 variable "enable_rbac" {
   description = "Enable RBAC authorization for Key Vault"
   type        = bool
@@ -70,7 +82,13 @@ variable "subnet_ids" {
 }
 
 variable "secrets" {
-  description = "Map of Key Vault secrets (name → value) that should be created"
+  description = "Map of Key Vault secrets (name → secret value) that should be created"
+  type        = map(string)
+  default     = {}
+}
+
+variable "items" {
+  description = "Map of configuration items (name → value) that should be created"
   type        = map(string)
   default     = {}
 }

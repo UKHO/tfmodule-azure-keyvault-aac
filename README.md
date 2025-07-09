@@ -34,9 +34,16 @@ variable "tenant_id" {
   type        = string
 }
 
-variable "object_id" {
-  description = "Azure Tenant ID"
+variable "subscription_id" {
+  description = "Azure Subscription ID. If not supplied then ARM_SUBSCRIPTION_ID environment variable must be set"
   type        = string
+  default     = null
+}
+
+variable "principal_id" {
+  description = "The object id of the terraform principal (Optional). If not supplied then data.azurerm_client_config.current.object_id will be used"
+  type        = string
+  default     = null
 }
 
 variable "enable_rbac" {
@@ -76,16 +83,16 @@ variable "aac_sku" {
   type        = string
 }
 
-variable "appconfig_keys" {
-  description = "Map of keys and values to add to the App Configuration"
+variable "secrets" {
+  description = "Map of Key Vault secrets (name → secret value) that should be created. If keys have '__', these will be converted to ':' for aac namespacing"
   type        = map(string)
   default     = {}
 }
 
-variable "appconfig_kv_secrets" {
-  description = "Map of Key Vault secrets to import into App Configuration"
-  type        = list(string)
-  default     = []
+variable "items" {
+  description = "Map of configuration items (name → value) that should be created. If keys have '__', these will be converted to ':' for aac namespacing"
+  type        = map(string)
+  default     = {}
 }
 
 
@@ -97,6 +104,8 @@ module "keyvault_appconfig" {
     location            = local.location
     keyvault_name       = local.kv_name
     tenant_id           = local.tenant_id
+    subscription_id     = var.subscription_id
+    principal_id        = data.azuread_service_principal.terraform.object_id # or data.azurerm_client_config.current.object_id, but this be an issue for local tf execution
     enable_rbac         = false
     kv_sku              = local.kv_sku
     ip_rules            = local.ip_rules
@@ -107,5 +116,9 @@ module "keyvault_appconfig" {
     secrets = {
         "DatabasePassword" = "ExampleSecret"
         "StorageKey"       = "123ABC"
+        }
+    }
+    items = {
+        "service-url" = "https://somewhere.ukho.gov.uk"
         }
     }
