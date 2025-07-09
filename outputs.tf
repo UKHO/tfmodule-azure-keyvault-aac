@@ -6,10 +6,6 @@ output "appconfig_id" {
     value = azurerm_app_configuration.appconfig.id
 }
 
-output "appconfig_dataowner_id" {
-    value = azurerm_role_assignment.appconf_dataowner.id
-}
-
 output "appconfig_connection_string" {
     value = azurerm_app_configuration.appconfig.primary_read_key[0].connection_string
 }
