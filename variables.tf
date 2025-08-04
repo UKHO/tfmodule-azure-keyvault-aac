@@ -102,8 +102,8 @@ variable "pe_enabled" {
 }
 
 variable "pe_environment" {
-    description = "environment for private endpoint (for example dev | prd | qa | pre)"
-    default = ""
+  description = "environment for private endpoint (for example dev | prd | qa | pre)"
+  default     = ""
 
   validation {
     condition     = var.pe_enabled == true ? length(var.pe_environment) > 0 : true
@@ -135,14 +135,19 @@ variable "hub_subscription_id" {
   description = "Azure Subscription ID for Hub"
   type        = string
   default     = null
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.hub_subscription_id) > 0 : true
+    error_message = "The vnet_name variable must be supplied"
+  }
 }
 
 variable "vnet_name" {
-  type = string
-  default     = ""
+  type    = string
+  default = ""
 
   validation {
-    condition     = length(var.vnet_name) > 0
+    condition     = var.pe_enabled == true ? length(var.vnet_name) > 0 : true
     error_message = "The vnet_name variable must be supplied"
   }
 }
@@ -152,7 +157,7 @@ variable "vnet_resource_group_name" {
   default = "m-spokeconfig-rg"
 
   validation {
-    condition     = length(var.vnet_resource_group_name) > 0
+    condition     = var.pe_enabled == true ? length(var.vnet_resource_group_name) > 0 : true
     error_message = "The vnet_resource_group_name variable must be supplied"
   }
 }
