@@ -98,7 +98,7 @@ variable "items" {
 variable "pe_enabled" {
   description = "Enable private endpoint"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "pe_environment" {
