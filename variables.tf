@@ -92,3 +92,72 @@ variable "items" {
   type        = map(string)
   default     = {}
 }
+
+# PE
+
+variable "pe_enabled" {
+  description = "Enable private endpoint"
+  type        = bool
+  default     = false
+}
+
+variable "pe_environment" {
+  description = "environment for private endpoint (for example dev | prd | qa | pre)"
+  default     = ""
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.pe_environment) > 0 : true
+    error_message = "The pe_environment variable must be supplied"
+  }
+}
+
+variable "pe_subnet_name" {
+  description = "subnet name that the private endpoint will associate"
+  default     = ""
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.pe_subnet_name) > 0 : true
+    error_message = "The pe_subnet_name variable must be supplied"
+  }
+}
+
+variable "dns_resource_group_name" {
+  description = "dns resource group name, please change domain-rg to either business-rg or engineering-rg"
+  default     = ""
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.dns_resource_group_name) > 0 : true
+    error_message = "The dns_resource_group_name variable must be supplied"
+  }
+}
+
+variable "hub_subscription_id" {
+  description = "Azure Subscription ID for Hub"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.hub_subscription_id) > 0 : true
+    error_message = "The vnet_name variable must be supplied"
+  }
+}
+
+variable "vnet_name" {
+  type    = string
+  default = ""
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.vnet_name) > 0 : true
+    error_message = "The vnet_name variable must be supplied"
+  }
+}
+
+variable "vnet_resource_group_name" {
+  type    = string
+  default = "m-spokeconfig-rg"
+
+  validation {
+    condition     = var.pe_enabled == true ? length(var.vnet_resource_group_name) > 0 : true
+    error_message = "The vnet_resource_group_name variable must be supplied"
+  }
+}

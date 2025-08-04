@@ -95,6 +95,45 @@ variable "items" {
   default     = {}
 }
 
+# PE
+
+variable "pe_enabled" {
+  description = "Enable private endpoint"
+  type        = bool
+  default     = false
+}
+
+variable "pe_environment" {
+  description = "environment for private endpoint (for example dev | prd | qa | pre)"
+  default     = ""
+}
+
+variable "pe_subnet_name" {
+  description = "subnet name that the private endpoint will associate"
+  default     = ""
+}
+
+variable "dns_resource_group_name" {
+  description = "dns resource group name, please change domain-rg to either business-rg or engineering-rg"
+  default     = ""
+}
+
+variable "hub_subscription_id" {
+  description = "Azure Subscription ID for Hub"
+  type        = string
+  default     = null
+}
+
+variable "vnet_name" {
+  type    = string
+  default = ""
+}
+
+variable "vnet_resource_group_name" {
+  type    = string
+  default = "m-spokeconfig-rg"
+}
+
 
 Example usage: 
 
@@ -122,3 +161,10 @@ module "keyvault_appconfig" {
         "service-url" = "https://somewhere.ukho.gov.uk"
         }
     }
+
+    pe_enabled              = true
+    hub_subscription_id     = var.hub_subscription_id
+    vnet_name               = data.azurerm_virtual_network.spoke.name
+    pe_environment          = var.environment
+    pe_subnet_name          = data.azurerm_subnet.spoke-pe-subnet.name
+    dns_resource_group_name = var.dns_resource_group
