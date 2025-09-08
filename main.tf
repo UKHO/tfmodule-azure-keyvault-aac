@@ -9,7 +9,7 @@ resource "azurerm_key_vault" "kv" {
     soft_delete_retention_days    = 7
     purge_protection_enabled      = true
     tags                          = var.tags
-    public_network_access_enabled = false
+    public_network_access_enabled = var.pe_enabled ? false : true
     
     network_acls {
         bypass                     = "AzureServices"
