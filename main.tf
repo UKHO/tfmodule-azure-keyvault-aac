@@ -60,7 +60,7 @@ resource "azurerm_app_configuration" "appconfig" {
     resource_group_name   = var.resource_group_name
     sku                   = var.aac_sku
     tags                  = var.tags
-    public_network_access = var.pe_enabled ? false : "Enabled"
+    public_network_access = var.pe_enabled ? "Disabled" : "Enabled"
 }
 
 resource "azurerm_role_assignment" "appconf_dataowner" {
