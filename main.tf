@@ -4,7 +4,7 @@ resource "azurerm_key_vault" "kv" {
     resource_group_name         = var.resource_group_name
     sku_name                    = var.kv_sku
     tenant_id                   = var.tenant_id
-    enable_rbac_authorization   = var.enable_rbac
+    rbac_authorization_enabled  = var.enable_rbac
     enabled_for_disk_encryption = true
     soft_delete_retention_days  = 7
     purge_protection_enabled    = true
