@@ -1,14 +1,15 @@
 resource "azurerm_key_vault" "kv" {
-    name                        = var.keyvault_name
-    location                    = var.location
-    resource_group_name         = var.resource_group_name
-    sku_name                    = var.kv_sku
-    tenant_id                   = var.tenant_id
-    enable_rbac_authorization   = var.enable_rbac
-    enabled_for_disk_encryption = true
-    soft_delete_retention_days  = 7
-    purge_protection_enabled    = true
-    tags                        = var.tags
+    name                          = var.keyvault_name
+    location                      = var.location
+    resource_group_name           = var.resource_group_name
+    sku_name                      = var.kv_sku
+    tenant_id                     = var.tenant_id
+    rbac_authorization_enabled    = var.enable_rbac
+    enabled_for_disk_encryption   = true
+    soft_delete_retention_days    = 7
+    purge_protection_enabled      = true
+    tags                          = var.tags
+    public_network_access_enabled = false
     
     network_acls {
         bypass                     = "AzureServices"
@@ -31,7 +32,7 @@ resource "azurerm_role_assignment" "keyvault_secrets_role" {
 }
 
 resource "azurerm_key_vault_access_policy" "kv_access" {
-    depends_on = [ azurerm_key_vault.kv ]
+    depends_on   = [ azurerm_key_vault.kv ]
     key_vault_id = azurerm_key_vault.kv.id
     tenant_id    = var.tenant_id
     object_id    = local.principal_id
@@ -45,7 +46,7 @@ resource "azurerm_key_vault_access_policy" "kv_access" {
 }
 
 resource "azurerm_key_vault_secret" "kv_secrets" {
-    depends_on = [ azurerm_key_vault_access_policy.kv_access, azurerm_role_assignment.keyvault_secrets_role ]
+    depends_on   = [ azurerm_key_vault_access_policy.kv_access, azurerm_role_assignment.keyvault_secrets_role ]
     for_each     = var.secrets
     name         = replace(lower(each.key), "__", "-")
     value        = each.value
@@ -54,15 +55,16 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
 }
 
 resource "azurerm_app_configuration" "appconfig" {
-    name                = var.appconfig_name
-    location            = var.location
-    resource_group_name = var.resource_group_name
-    sku                 = var.aac_sku
-    tags                = var.tags
+    name                  = var.appconfig_name
+    location              = var.location
+    resource_group_name   = var.resource_group_name
+    sku                   = var.aac_sku
+    tags                  = var.tags
+    public_network_access = "Enabled"
 }
 
 resource "azurerm_role_assignment" "appconf_dataowner" {
-    depends_on = [ azurerm_app_configuration.appconfig ]
+    depends_on           = [ azurerm_app_configuration.appconfig ]
     scope                = azurerm_app_configuration.appconfig.id
     role_definition_name = "App Configuration Data Owner"
     principal_id         = local.principal_id
