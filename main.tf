@@ -52,6 +52,7 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
     value        = each.value
     key_vault_id = azurerm_key_vault.kv.id
     tags         = var.tags
+    content_type = "text/plain"
 }
 
 resource "azurerm_app_configuration" "appconfig" {
