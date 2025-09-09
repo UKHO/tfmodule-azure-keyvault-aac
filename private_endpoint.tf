@@ -6,7 +6,7 @@ module "private_endpoint_kv" {
   }
 
   private_connection          = [azurerm_key_vault.kv.id]
-  pe_identity                 = [replace(azurerm_key_vault.kv.name, "^m+-", "")]
+  pe_identity                 = [azurerm_key_vault.kv.name]
   pe_environment              = var.pe_environment
   pe_vnet_rg                  = var.vnet_resource_group_name
   pe_vnet_name                = var.vnet_name
@@ -29,7 +29,7 @@ module "private_endpoint_aac" {
   }
 
   private_connection          = [azurerm_app_configuration.appconfig.id]
-  pe_identity                 = [replace(azurerm_app_configuration.appconfig.name, "^m+-", "")]
+  pe_identity                 = [azurerm_app_configuration.appconfig.name]
   pe_environment              = var.pe_environment
   pe_vnet_rg                  = var.vnet_resource_group_name
   pe_vnet_name                = var.vnet_name
