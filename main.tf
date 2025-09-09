@@ -49,10 +49,10 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
     depends_on   = [ azurerm_key_vault_access_policy.kv_access, azurerm_role_assignment.keyvault_secrets_role ]
     for_each     = var.secrets
     name         = replace(lower(each.key), "__", "-")
-    value        = each.value
+    value        = each.value.value
     key_vault_id = azurerm_key_vault.kv.id
     tags         = var.tags
-    content_type = "text/plain"
+    content_type = each.value.content_type
 }
 
 resource "azurerm_app_configuration" "appconfig" {

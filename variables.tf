@@ -82,9 +82,12 @@ variable "subnet_ids" {
 }
 
 variable "secrets" {
-  description = "Map of Key Vault secrets (name → secret value) that should be created"
-  type        = map(string)
-  default     = {}
+  description = "Map of Key Vault secrets (name → object) that should be created. Each object must have 'value' and 'content_type'."
+  type = map(object({
+    value        = string
+    content_type = string
+  }))
+  default = {}
 }
 
 variable "items" {

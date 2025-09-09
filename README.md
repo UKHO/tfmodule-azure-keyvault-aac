@@ -84,8 +84,11 @@ variable "aac_sku" {
 }
 
 variable "secrets" {
-  description = "Map of Key Vault secrets (name → secret value) that should be created. If keys have '__', these will be converted to ':' for aac namespacing"
-  type        = map(string)
+  description = "Map of Key Vault secrets (name → object) that should be created. Each object must have 'value' and 'content_type'."
+  type        = map(object({
+    value        = string
+    content_type = string
+  }))
   default     = {}
 }
 
@@ -138,33 +141,38 @@ variable "vnet_resource_group_name" {
 Example usage: 
 
 module "keyvault_appconfig" {
-    source              = "github.com/UKHO/terraform-azure-keyvault-appconfig"
-    resource_group_name = local.rg
-    location            = local.location
-    keyvault_name       = local.kv_name
-    tenant_id           = local.tenant_id
-    subscription_id     = var.subscription_id
-    principal_id        = data.azuread_service_principal.terraform.object_id # or data.azurerm_client_config.current.object_id, but this be an issue for local tf execution
-    enable_rbac         = false
-    kv_sku              = local.kv_sku
-    ip_rules            = local.ip_rules
-    subnet_ids          = local.subnet_ids
-    appconfig_name      = local.aac_name
-    aac_sku             = local.aac_sku
-    tags                = local.tags
-    secrets = {
-        "DatabasePassword" = "ExampleSecret"
-        "StorageKey"       = "123ABC"
-        }
+  source              = "github.com/UKHO/terraform-azure-keyvault-appconfig"
+  resource_group_name = local.rg
+  location            = local.location
+  keyvault_name       = local.kv_name
+  tenant_id           = local.tenant_id
+  subscription_id     = var.subscription_id
+  principal_id        = data.azuread_service_principal.terraform.object_id # or data.azurerm_client_config.current.object_id
+  enable_rbac         = false
+  kv_sku              = local.kv_sku
+  ip_rules            = local.ip_rules
+  subnet_ids          = local.subnet_ids
+  appconfig_name      = local.aac_name
+  aac_sku             = local.aac_sku
+  tags                = local.tags
+  secrets = {
+    "DatabasePassword" = {
+      value        = "ExampleSecret"
+      content_type = "text/plain"
     }
-    items = {
-        "service-url" = "https://somewhere.ukho.gov.uk"
-        }
+    "StorageKey" = {
+      value        = "123ABC"
+      content_type = "application/json"
     }
-
-    pe_enabled              = true
-    hub_subscription_id     = var.hub_subscription_id
-    vnet_name               = data.azurerm_virtual_network.spoke.name
-    pe_environment          = var.environment
-    pe_subnet_name          = data.azurerm_subnet.spoke-pe-subnet.name
-    dns_resource_group_name = var.dns_resource_group
+  }
+  items = {
+    "service-url" = "https://somewhere.ukho.gov.uk"
+  }
+  pe_enabled              = true
+  hub_subscription_id     = var.hub_subscription_id
+  vnet_name               = data.azurerm_virtual_network.spoke.name
+  pe_environment          = var.environment
+  pe_subnet_name          = data.azurerm_subnet.spoke-pe-subnet.name
+  dns_resource_group_name = var.dns_resource_group
+}
+```
