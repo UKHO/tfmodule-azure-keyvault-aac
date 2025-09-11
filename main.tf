@@ -46,12 +46,14 @@ resource "azurerm_key_vault_access_policy" "kv_access" {
 }
 
 resource "azurerm_key_vault_secret" "kv_secrets" {
-    depends_on   = [ azurerm_key_vault_access_policy.kv_access, azurerm_role_assignment.keyvault_secrets_role ]
-    for_each     = var.secrets
-    name         = replace(lower(each.key), "__", "-")
-    value        = each.value
-    key_vault_id = azurerm_key_vault.kv.id
-    tags         = var.tags
+    depends_on      = [ azurerm_key_vault_access_policy.kv_access, azurerm_role_assignment.keyvault_secrets_role ]
+    for_each        = var.secrets
+    name            = replace(lower(each.key), "__", "-")
+    value           = each.value.value
+    key_vault_id    = azurerm_key_vault.kv.id
+    tags            = var.tags
+    content_type    = each.value.content_type
+    expiration_date = "2299-12-31T23:59:59Z"
 }
 
 resource "azurerm_app_configuration" "appconfig" {
