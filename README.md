@@ -157,11 +157,11 @@ module "keyvault_appconfig" {
   tags                = local.tags
   secrets = {
     "DatabasePassword" = {
-      value        = "ExampleSecret"
+      value        = "var.secret"
       content_type = "text/plain"
     }
     "StorageKey" = {
-      value        = "123ABC"
+      value        = "var.storage_key"
       content_type = "application/json"
     }
   }
