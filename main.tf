@@ -53,7 +53,7 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
     key_vault_id    = azurerm_key_vault.kv.id
     tags            = var.tags
     content_type    = each.value.content_type
-    expiration_date = "9999-12-31T23:59:59Z"
+    expiration_date = "2299-12-31T23:59:59Z"
 }
 
 resource "azurerm_app_configuration" "appconfig" {
