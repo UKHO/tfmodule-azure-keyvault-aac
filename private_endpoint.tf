@@ -1,5 +1,5 @@
 module "private_endpoint_kv" {
-  source    = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.7.0"
+  source    = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.7.1"
   providers = {
     azurerm.spoke = azurerm
     azurerm.hub   = azurerm.hub
@@ -22,7 +22,7 @@ module "private_endpoint_kv" {
 }
 
 module "private_endpoint_aac" {
-  source    = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.7.0"
+  source    = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.7.1"
   providers = {
     azurerm.spoke = azurerm
     azurerm.hub   = azurerm.hub
