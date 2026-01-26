@@ -22,7 +22,7 @@ resource "azurerm_key_vault" "kv" {
         ignore_changes = [
             tags
         ]
-        }
+    }
 }
 
 resource "azurerm_role_assignment" "keyvault_secrets_role" {
@@ -63,6 +63,12 @@ resource "azurerm_app_configuration" "appconfig" {
     sku                   = var.aac_sku
     tags                  = var.tags
     public_network_access = var.pe_enabled ? "Disabled" : "Enabled"
+
+    lifecycle {
+        ignore_changes = [
+            tags
+        ]
+    }
 }
 
 resource "azurerm_role_assignment" "appconf_dataowner" {
