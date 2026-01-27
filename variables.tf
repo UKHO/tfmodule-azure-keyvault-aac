@@ -82,18 +82,22 @@ variable "subnet_ids" {
 }
 
 variable "secrets" {
-  description = "Map of Key Vault secrets (name → object) that should be created. Each object must have 'value' and 'content_type'."
+  description = "Map of Key Vault secrets (name → object) that should be created. Each object must have 'value' and 'content_type'. Optional 'aacKey' can be provided to specify a custom key for App Configuration."
   type = map(object({
     value        = string
     content_type = string
+    aacKey       = optional(string)
   }))
   default = {}
 }
 
 variable "items" {
-  description = "Map of configuration items (name → value) that should be created"
-  type        = map(string)
-  default     = {}
+  description = "Map of configuration items (name → object) that should be created. Each object must have 'value'. Optional 'aacKey' can be provided to specify a custom key for App Configuration."
+  type = map(object({
+    value  = string
+    aacKey = optional(string)
+  }))
+  default = {}
 }
 
 # PE
