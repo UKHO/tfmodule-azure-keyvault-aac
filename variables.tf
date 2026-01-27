@@ -92,12 +92,9 @@ variable "secrets" {
 }
 
 variable "items" {
-  description = "Map of configuration items (name → object) that should be created. Each object must have 'value'. Optional 'aacKey' can be provided to specify a custom key for App Configuration."
-  type = map(object({
-    value  = string
-    aacKey = optional(string)
-  }))
-  default = {}
+  description = "Map of configuration items (name → value) that should be created"
+  type        = map(string)
+  default     = {}
 }
 
 # PE

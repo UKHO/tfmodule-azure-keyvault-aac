@@ -85,6 +85,6 @@ resource "azurerm_app_configuration_key" "appconf_items" {
     depends_on             = [ azurerm_role_assignment.appconf_dataowner ]
     for_each               = var.items
     configuration_store_id = azurerm_app_configuration.appconfig.id
-    key                    = each.value.aacKey != null ? each.value.aacKey : replace(each.key, "__", ":")
-    value                  = each.value.value
+    key                    = replace(each.key, "__", ":")
+    value                  = each.value
 }
