@@ -83,7 +83,7 @@ resource "azurerm_app_configuration_key" "kv_secrets" {
     for_each               = var.secrets
     configuration_store_id = azurerm_app_configuration.appconfig.id
     type                   = "vault"
-    key                    = replace(each.key, "__", ":")
+    key                    = each.value.aacKey != null ? each.value.aacKey : replace(each.key, "__", ":")
     vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${replace(lower(each.key), "__", "-")}"
 }
 
