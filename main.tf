@@ -26,7 +26,7 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "kv_secrets" {
-    depends_on      = var.enable_rbac ? [ azurerm_role_assignment.keyvault_secrets_role ] : [ azurerm_key_vault_access_policy.kv_access ]
+    depends_on      = [ azurerm_key_vault_access_policy.kv_access, azurerm_role_assignment.keyvault_secrets_role ]
     for_each        = var.secrets
     name            = replace(lower(each.key), "__", "-")
     value           = each.value.value
