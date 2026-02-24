@@ -34,6 +34,12 @@ resource "azurerm_key_vault_secret" "kv_secrets" {
     tags            = var.tags
     content_type    = each.value.content_type
     expiration_date = "2299-12-31T23:59:59Z"
+
+    lifecycle {
+        ignore_changes = [
+            expiration_date
+        ]
+    }
 }
 
 resource "azurerm_app_configuration" "appconfig" {
