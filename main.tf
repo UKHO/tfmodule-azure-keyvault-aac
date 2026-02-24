@@ -64,6 +64,7 @@ resource "azurerm_app_configuration_key" "kv_secrets" {
     type                   = "vault"
     key                    = each.value.aacKey != null ? each.value.aacKey : replace(each.key, "__", ":")
     vault_key_reference    = "${azurerm_key_vault.kv.vault_uri}secrets/${replace(lower(each.key), "__", "-")}"
+    tags                   = lookup(each.value, "tags", null)
 }
 
 resource "azurerm_app_configuration_key" "appconf_items" {
